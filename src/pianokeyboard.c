@@ -85,7 +85,9 @@ draw_note(PianoKeyboard *pk, int note)
 
 	GdkColor black = {0, 0, 0, 0};
 	GdkColor white = {0, 65535, 65535, 65535};
-
+	GdkColor red = {0, 65535, 0, 0};
+	GdkColor blue = {0, 0, 0, 65535};
+	
 	GdkGC *gc = GTK_WIDGET(pk)->style->fg_gc[0];
 	GtkWidget *widget;
 
@@ -96,13 +98,19 @@ draw_note(PianoKeyboard *pk, int note)
 	h = pk->notes[note].h;
 
 	if (pk->notes[note].pressed || pk->notes[note].sustained)
-		is_white = !is_white;
-
-	if (is_white)
-		gdk_gc_set_rgb_fg_color(gc, &white);
-	else
-		gdk_gc_set_rgb_fg_color(gc, &black);
-
+	{
+	    if (is_white)
+		    gdk_gc_set_rgb_fg_color(gc, &blue);
+	    else
+		    gdk_gc_set_rgb_fg_color(gc, &red);
+	}
+    else
+    {
+	    if (is_white)
+		    gdk_gc_set_rgb_fg_color(gc, &white);
+	    else
+		    gdk_gc_set_rgb_fg_color(gc, &black);
+    }
 	gdk_draw_rectangle(GTK_WIDGET(pk)->window, gc, TRUE, x, 0, w, h);
 	gdk_gc_set_rgb_fg_color(gc, &black);
 	gdk_draw_rectangle(GTK_WIDGET(pk)->window, gc, FALSE, x, 0, w, h);

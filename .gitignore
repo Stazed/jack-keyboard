@@ -5,6 +5,9 @@ config.h
 /man/Makefile.in
 /pixmaps/Makefile.in
 /src/Makefile.in
+/src/.deps/
+/src/jack-keyboard
+stamp-h1
 config.h.in
 config.log
 config.status
