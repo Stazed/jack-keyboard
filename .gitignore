@@ -1,0 +1,16 @@
+*.[oa]
+Makefile.in
+Makefile
+config.h
+/man/Makefile.in
+/pixmaps/Makefile.in
+/src/Makefile.in
+config.h.in
+config.log
+config.status
+configure
+depcomp
+install-sh
+missing
+aclocal.m4
+autom4te.cache
