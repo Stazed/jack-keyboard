@@ -25,9 +25,8 @@
 #
 # Makefile for Jack Keyboard
 #
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 set(VERSION "2.7.1")
 
 set(JackEnable ON CACHE BOOL "Enable support for Jack")
@@ -36,32 +35,39 @@ set(X11Enable ON CACHE BOOL "Enable support for X11")
 
 project(jack-keyboard)
 
-add_executable(jack-keyboard src/jack-keyboard src/pianokeyboard)
+add_executable(jack-keyboard src/jack-keyboard.c src/pianokeyboard.c)
 
-find_package(GTK2 2.2 REQUIRED gtk)
-include_directories(${GTK2_INCLUDE_DIRS})
-target_link_libraries(jack-keyboard ${GTK2_LIBRARIES})
+find_package (PkgConfig REQUIRED)
+
+pkg_check_modules (GTK REQUIRED gtk+-2.0>=2.12)
+
+include_directories(${GTK_INCLUDE_DIRS})
+target_link_libraries(jack-keyboard ${GTK_LINK_LIBRARIES})
 
 if(JackEnable)
-find_package(JACK)
-include_directories(${JACK_INCLUDE_DIR})
-target_link_libraries(jack-keyboard ${JACK_LIBRARIES})
-add_definitions(-DHAVE_JACK=1)
+    pkg_check_modules (JACK REQUIRED jack>=0.115.6)
+    if (JACK_FOUND)
+        include_directories(${JACK_INCLUDE_DIRS})
+        target_link_libraries(jack-keyboard ${JACK_LINK_LIBRARIES})
+        add_definitions(-DHAVE_JACK=1)
+    endif (JACK_FOUND)
 endif()
 
 if(LashEnable)
-find_package(LASH)
-include_directories(${LASH_INCLUDE_DIR})
-target_link_libraries(jack-keyboard ${LASH_LIBRARIES})
-add_definitions(-DHAVE_LASH=1)
+    find_package(LASH REQUIRED)
+    include_directories(${LASH_INCLUDE_DIR})
+    target_link_libraries(jack-keyboard ${LASH_LIBRARIES})
+    add_definitions(-DHAVE_LASH=1)
 endif()
 
 if(X11Enable)
-find_package(X11)
-include_directories(${X11_INCLUDE_DIR})
-target_link_libraries(jack-keyboard ${X11_LIBRARIES})
-add_definitions(-DHAVE_X11=1)
+    find_package(X11 REQUIRED)
+    include_directories(${X11_INCLUDE_DIRS})
+    target_link_libraries(jack-keyboard ${X11_LIBRARIES})
+    add_definitions(-DHAVE_X11=1)
 endif()
+
+target_link_libraries(jack-keyboard gthread-2.0)
 
 install(TARGETS jack-keyboard RUNTIME DESTINATION bin)
 install(FILES pixmaps/jack-keyboard.png DESTINATION share/pixmaps)
