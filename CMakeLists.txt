@@ -25,12 +25,12 @@
 #
 # Makefile for Jack Keyboard
 #
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5.1...3.31.1)
 
 set(VERSION "2.7.1")
 
 set(JackEnable ON CACHE BOOL "Enable support for Jack")
-set(LashEnable ON CACHE BOOL "Enable support for Lash")
+set(LashEnable OFF CACHE BOOL "Enable support for Lash")
 set(X11Enable ON CACHE BOOL "Enable support for X11")
 
 project(jack-keyboard)
